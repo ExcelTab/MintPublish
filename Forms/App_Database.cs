@@ -55,7 +55,7 @@ namespace Mint.Forms
             string sTable = Lbo_Tables.SelectedItem.ToString();
             string connectionString;
             if (login == "simonghislain") { connectionString = $"Server=tcp:exceltab.database.windows.net,1433;Initial Catalog={sDatabase};Persist Security Info=False;User ID={login};Password={password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"; }
-            else { connectionString = Database.MainConnectionString; }
+            else { connectionString = Database.MainConnectionString(); }
 
             SqlConnection connection = new SqlConnection(connectionString);
             await connection.OpenAsync();
@@ -85,20 +85,14 @@ namespace Mint.Forms
             //Upload all data from the datagridview that was modified by the user to the SQL database
             SqlCommandBuilder commandBuilder = new SqlCommandBuilder(adapter);
             adapter.Update(dataTable);
-
-
         }
 
-        private void Show_Sales_Detail(object senter, EventArgs e)
+        private void Refresh_Buffer(object sender, EventArgs e)
         {
-            //Open a new form that will show in labels all the column header, and in adjacent textbox,
-            //the value of the selected row.
-
-
-
-
-
+            //Upload all data from the datagridview that was modified by the user to the SQL database
+            Database.LoadDataFromBuffferToMain();
         }
+
 
         private void Dgv_Main_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
         {

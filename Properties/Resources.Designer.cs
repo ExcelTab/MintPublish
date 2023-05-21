@@ -93,16 +93,6 @@ namespace Mint.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap HEXOA_CREATE {
-            get {
-                object obj = ResourceManager.GetObject("HEXOA_CREATE", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap HEXOA_DATABASE {
             get {
                 object obj = ResourceManager.GetObject("HEXOA_DATABASE", resourceCulture);
@@ -117,6 +107,26 @@ namespace Mint.Properties {
             get {
                 object obj = ResourceManager.GetObject("HEXOA_ORDERS", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HEXOA_PRODUCTS {
+            get {
+                object obj = ResourceManager.GetObject("HEXOA_PRODUCTS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] OrderTemplatePDF {
+            get {
+                object obj = ResourceManager.GetObject("OrderTemplatePDF", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

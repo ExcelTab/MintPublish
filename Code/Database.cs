@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using Mint.Properties;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace Mint.Code
@@ -13,65 +14,149 @@ namespace Mint.Code
         //Store locally the value of the textboxes TB_Login and TB_Password
         // TODO: Clean these connectionstrings
         public static readonly string ServerName = "exceltab.database.windows.net,1433";
-        public static readonly string BufferConnectionString = "Server=tcp:exceltab.database.windows.net,1433;Initial Catalog=Hexoa Buffer;Persist Security Info=False;User ID=BotERP;Password=3094OIHEihoefseiEOIR9872oi;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-        public static readonly string MainConnectionString = "Server=tcp:exceltab.database.windows.net,1433;Initial Catalog=Hexoa Main;Persist Security Info=False;User ID=BotERP;Password=3094OIHEihoefseiEOIR9872oi;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+  
+        public static string MainConnectionString()
+        {
+            string sProductKey = Settings.Default.productkey;
+            if(sProductKey==string.Empty)
+            {
+                //TODO: Changer ce système de clé produit pourri
+                //Open an input box and ask the user to enter the product key
+                sProductKey = Microsoft.VisualBasic.Interaction.InputBox("Cet outil est verouillé. Introduisez la clé que vous avez reçu d'ExcelTab.", "Clé Produit", "", -1, -1);
+                Settings.Default.productkey = sProductKey;
+                Settings.Default.Save();
+            }
+            string sConString = "Server=tcp:exceltab.database.windows.net,1433;Initial Catalog=Hexoa Main;Persist Security Info=False;User ID=BotERP;Password=" + sProductKey +";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            return sConString;
+        }
 
+        public static string BufferConnectionString()
+        {
+            string sProductKey = Settings.Default.productkey;
+            if (sProductKey == string.Empty)
+            {
+                //TODO: Changer ce système de clé produit pourri
+                //Open an input box and ask the user to enter the product key
+                sProductKey = Microsoft.VisualBasic.Interaction.InputBox("Cet outil est verouillé. Introduisez la clé que vous avez reçu d'ExcelTab.", "Clé Produit", "", -1, -1);
+                Settings.Default.productkey = sProductKey;
+                Settings.Default.Save();
+            }
+            string sConString = "Server=tcp:exceltab.database.windows.net,1433;Initial Catalog=Hexoa Buffer;Persist Security Info=False;User ID=BotERP;Password=" + sProductKey + ";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            return sConString;
+        }
 
-        static void LoadDataFromBuffferToMain()
+        public static void LoadDataFromBuffferToMain()
         {
             /// <summary>
             ///  Checks for updates in the Buffer database and updates the main database accordingly
             /// </summary>
             /// 
 
-            using (SqlConnection BufferConnection = new SqlConnection(BufferConnectionString))
+            // Connection strings for Buffer and Main databases
+            string bufferConnectionString = BufferConnectionString();
+            string mainConnectionString = MainConnectionString();
+
+            List<string> updatedTables = new List<string>();
+
+            // Establish connections
+            using (SqlConnection bufferConnection = new SqlConnection(bufferConnectionString))
+            using (SqlConnection mainConnection = new SqlConnection(mainConnectionString))
+            using (SqlConnection catalogConnection = new SqlConnection(mainConnectionString))
             {
-                BufferConnection.Open();
+                bufferConnection.Open();
+                mainConnection.Open();
+                catalogConnection.Open();
 
-                // Check the last modified date of the buffered table
-                string Command = "SELECT last_user_update FROM sys.tables WHERE object_id = OBJECT_ID('dbo.SALES')";
-                SqlCommand SqlCommand = new SqlCommand(Command, BufferConnection);
-                DateTime BufferDate = (DateTime)SqlCommand.ExecuteScalar();
+                // Query to fetch tables from CATALOG_TABLES
+                string tableQuery = "SELECT TRIM(Table_Name) AS TableName FROM CATALOG_TABLES";
 
-                BufferConnection.Close();
+                // Execute the query on Main database to get the list of tables
+                SqlCommand tableCommand = new SqlCommand(tableQuery, catalogConnection);
+                SqlDataReader catalogReader = tableCommand.ExecuteReader();
 
-                using (SqlConnection mainConnection = new SqlConnection(MainConnectionString))
+                while (catalogReader.Read())
                 {
-                    mainConnection.Open();
+                    string tableName = catalogReader.GetString(0);
 
-                    // Check the last modified date of the lodger table
-                    string checkLodgerDateQuery = "SELECT LastModifiedDate FROM LodgerTable";
-                    SqlCommand checkLodgerDateCommand = new SqlCommand(checkLodgerDateQuery, mainConnection);
-                    DateTime lodgerModifiedDate = (DateTime)checkLodgerDateCommand.ExecuteScalar();
+                    // Query to check modification dates for the current table
+                    string modifyQuery = $@"
+                        SELECT modify_date AS BDate, (SELECT COUNT(*) FROM {tableName}) AS BRows
+                        FROM sys.tables
+                        WHERE name = '{tableName}'";
 
-                    if (BufferDate > lodgerModifiedDate)
+                    // Execute the query on Buffer database
+                    SqlCommand bufferCommand = new SqlCommand(modifyQuery, bufferConnection);
+                    SqlDataReader bufferReader = bufferCommand.ExecuteReader();
+
+                    int bufferRowCount = 0;
+                    if (bufferReader.Read())
                     {
-                        // Drop the main database table
-                        string dropTableQuery = "DROP TABLE MainDataTable";
-                        SqlCommand dropTableCommand = new SqlCommand(dropTableQuery, mainConnection);
-                        dropTableCommand.ExecuteNonQuery();
-
-                        // Create the main table
-                        string createTableQuery = "CREATE TABLE MainDataTable (...)";
-                        SqlCommand createTableCommand = new SqlCommand(createTableQuery, mainConnection);
-                        createTableCommand.ExecuteNonQuery();
-
-                        // Copy the data from the buffered table to the main table
-                        string copyTableQuery = "INSERT INTO MainDataTable SELECT * FROM [BufferedDatabaseName].[dbo].[BufferedDataTable]";
-                        SqlCommand copyTableCommand = new SqlCommand(copyTableQuery, mainConnection);
-                        copyTableCommand.ExecuteNonQuery();
-
-                        // Update the lodger table with the new last modified date
-                        string updateLodgerQuery = "UPDATE LodgerTable SET LastModifiedDate = @ModifiedDate";
-                        SqlCommand updateLodgerCommand = new SqlCommand(updateLodgerQuery, mainConnection);
-                        updateLodgerCommand.Parameters.AddWithValue("@ModifiedDate", BufferDate);
-                        updateLodgerCommand.ExecuteNonQuery();
+                        //DateTime bufferModifyDate = bufferReader.GetDateTime(0);
+                        bufferRowCount = bufferReader.GetInt32(1);
                     }
+                    bufferReader.Close();
 
-                    mainConnection.Close();
+                    // Execute the query on Main database
+                    //SqlCommand mainCommand = new SqlCommand(modifyQuery, mainConnection);
+                    //SqlDataReader mainReader = mainCommand.ExecuteReader();
+
+                    //if (mainReader.Read())
+                    //{
+                    //    DateTime mainModifyDate = mainReader.GetDateTime(0);
+                    //    int mainRowCount = mainReader.GetInt32(1);
+                    //}
+                    //mainReader.Close();
+
+                    // Check if the Buffer table meets the criteria
+                    if (bufferRowCount >= 2)
+                    { 
+                        //bufferModifyDate < DateTime.Now.AddMinutes(-10) &&
+                        //bufferModifyDate > mainModifyDate)
+
+                        // Deletes previous data from Main database
+                        string deleteQuery = $"DELETE FROM dbo.{tableName}";
+                        SqlCommand deleteCommand = new SqlCommand(deleteQuery, mainConnection);
+                        deleteCommand.ExecuteNonQuery();
+
+                        // Select data from Buffer database
+                        string selectQuery = $"SELECT * FROM dbo.{tableName}";
+                        SqlCommand selectCommand = new SqlCommand(selectQuery, bufferConnection);
+
+                        using (SqlDataAdapter dataAdapter = new SqlDataAdapter(selectCommand))
+                        {
+                            DataTable bufferData = new DataTable();
+                            dataAdapter.Fill(bufferData);
+
+                            // Insert this buffered data into Main database on the corresponding data table
+                            using (SqlBulkCopy bulkCopy = new SqlBulkCopy(mainConnection))
+                            {
+                                bulkCopy.DestinationTableName = tableName;
+                                bulkCopy.WriteToServer(bufferData);
+                            }
+                        }
+                        //TODO : get to a delete of the buffer later
+                        // Deletes the data from Buffer database
+                        //SqlCommand deleteBufferCommand = new SqlCommand(deleteQuery, bufferConnection);
+                        //deleteBufferCommand.ExecuteNonQuery();
+
+                        //TODO : also add the date at which the table was updated in the CATALOG_TABLES table
+                        // Add the table to the list of updated tables
+                        updatedTables.Add(tableName);
+                    }                   
                 }
+                catalogReader.Close();
             }
+            //show in a message box the list of updated tables
+            string message = "Les tables suivantes ont été mises à jour : \n";
+            foreach (string table in updatedTables)
+            {
+                message += table + "\n";
+            }
+            MessageBox.Show(message);
+
+            
         }
+
 
         // TODO: Chose if we use Using or declare connections in these 2 similar LoadData and LoadTable methods
         public static List<string> LoadDatabases()
@@ -112,7 +197,7 @@ namespace Mint.Code
             List<string> DatatableList = new List<string>();
             try
             {
-                using (SqlConnection connection = new SqlConnection(MainConnectionString))
+                using (SqlConnection connection = new SqlConnection(MainConnectionString()))
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand("SELECT name FROM sys.tables", connection);
@@ -138,7 +223,7 @@ namespace Mint.Code
             DataTable dt = new DataTable();
             try
             {
-                using (SqlConnection connection = new SqlConnection(MainConnectionString))
+                using (SqlConnection connection = new SqlConnection(MainConnectionString()))
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(sCommand, connection);
@@ -153,6 +238,32 @@ namespace Mint.Code
             }
             return dt;
         }
-    }
 
-}
+        public static void ExecuteQuery(string query, Dictionary<string, object> parameters = null)
+            {
+                using (SqlConnection connection = new SqlConnection(MainConnectionString()))
+                {
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        connection.Open();
+                        if (parameters != null)
+                        {
+                            foreach (KeyValuePair<string, object> parameter in parameters)
+                            {
+                                if (parameter.Value == null)
+                                {
+                                    command.Parameters.AddWithValue(parameter.Key, DBNull.Value);
+                                }
+                                else
+                                {
+                                    command.Parameters.AddWithValue(parameter.Key, parameter.Value);
+                                }
+                            }
+                        }
+                    command.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+
+    }

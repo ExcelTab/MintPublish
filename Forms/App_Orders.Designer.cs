@@ -40,7 +40,13 @@
             Cbx_OFP = new CheckBox();
             Groupbox_Status = new GroupBox();
             Button_Refresh = new Button();
+            label3 = new Label();
+            label4 = new Label();
+            textBox1 = new TextBox();
+            button1 = new Button();
+            pictureBox1 = new PictureBox();
             Groupbox_Status.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -64,9 +70,9 @@
             // Lvi_Orders
             // 
             Lvi_Orders.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            Lvi_Orders.Location = new Point(18, 47);
+            Lvi_Orders.Location = new Point(12, 240);
             Lvi_Orders.Name = "Lvi_Orders";
-            Lvi_Orders.Size = new Size(422, 483);
+            Lvi_Orders.Size = new Size(422, 290);
             Lvi_Orders.TabIndex = 16;
             Lvi_Orders.UseCompatibleStateImageBehavior = false;
             Lvi_Orders.SelectedIndexChanged += Lvi_Orders_SelectedIndexChanged;
@@ -76,9 +82,9 @@
             label2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             label2.BackColor = Color.FromArgb(255, 255, 192);
             label2.BorderStyle = BorderStyle.FixedSingle;
-            label2.Location = new Point(446, 47);
+            label2.Location = new Point(446, 9);
             label2.Name = "label2";
-            label2.Size = new Size(538, 483);
+            label2.Size = new Size(538, 521);
             label2.TabIndex = 17;
             label2.Text = "La vue OF de la commande apparaitra ici";
             label2.TextAlign = ContentAlignment.MiddleCenter;
@@ -160,7 +166,7 @@
             Groupbox_Status.Controls.Add(Cbx_EPP);
             Groupbox_Status.Controls.Add(Cbx_CAN);
             Groupbox_Status.Controls.Add(Cbx_EXP);
-            Groupbox_Status.Location = new Point(446, 4);
+            Groupbox_Status.Location = new Point(19, 194);
             Groupbox_Status.Name = "Groupbox_Status";
             Groupbox_Status.Size = new Size(328, 40);
             Groupbox_Status.TabIndex = 24;
@@ -168,7 +174,7 @@
             // 
             // Button_Refresh
             // 
-            Button_Refresh.Location = new Point(780, 17);
+            Button_Refresh.Location = new Point(353, 207);
             Button_Refresh.Name = "Button_Refresh";
             Button_Refresh.Size = new Size(75, 23);
             Button_Refresh.TabIndex = 25;
@@ -176,11 +182,61 @@
             Button_Refresh.UseVisualStyleBackColor = true;
             Button_Refresh.Click += Button_Refresh_Click;
             // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(12, 189);
+            label3.Name = "label3";
+            label3.Size = new Size(229, 15);
+            label3.TabIndex = 26;
+            label3.Text = "Ou choisissez une commande dans la liste";
+            label3.Click += label3_Click;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(12, 50);
+            label4.Name = "label4";
+            label4.Size = new Size(206, 15);
+            label4.TabIndex = 27;
+            label4.Text = "Encodez ou scannez une commande :";
+            // 
+            // textBox1
+            // 
+            textBox1.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point);
+            textBox1.Location = new Point(109, 88);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(325, 39);
+            textBox1.TabIndex = 28;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(399, 133);
+            button1.Name = "button1";
+            button1.Size = new Size(35, 23);
+            button1.TabIndex = 29;
+            button1.Text = "Go";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Location = new Point(12, 88);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(80, 39);
+            pictureBox1.TabIndex = 30;
+            pictureBox1.TabStop = false;
+            // 
             // App_Orders
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(996, 542);
+            Controls.Add(pictureBox1);
+            Controls.Add(button1);
+            Controls.Add(textBox1);
+            Controls.Add(label4);
+            Controls.Add(label3);
             Controls.Add(Button_Refresh);
             Controls.Add(Groupbox_Status);
             Controls.Add(label2);
@@ -193,6 +249,7 @@
             Text = "App_Orders";
             Groupbox_Status.ResumeLayout(false);
             Groupbox_Status.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -210,5 +267,10 @@
         private CheckBox Cbx_OFP;
         private GroupBox Groupbox_Status;
         private Button Button_Refresh;
+        private Label label3;
+        private Label label4;
+        private TextBox textBox1;
+        private Button button1;
+        private PictureBox pictureBox1;
     }
 }

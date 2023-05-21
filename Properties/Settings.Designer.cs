@@ -58,5 +58,17 @@ namespace Mint.Properties {
                 this["mods"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string productkey {
+            get {
+                return ((string)(this["productkey"]));
+            }
+            set {
+                this["productkey"] = value;
+            }
+        }
     }
 }

@@ -42,7 +42,7 @@
             label2 = new Label();
             Lbl_NotConnected = new Label();
             Btn_HomeConnect = new Button();
-            label3 = new Label();
+            Lbl_Version = new Label();
             toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
@@ -189,24 +189,24 @@
             Btn_HomeConnect.UseVisualStyleBackColor = false;
             Btn_HomeConnect.Click += Open_Login_Form;
             // 
-            // label3
+            // Lbl_Version
             // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point);
-            label3.ForeColor = Color.FromArgb(128, 64, 0);
-            label3.Location = new Point(113, 34);
-            label3.Name = "label3";
-            label3.Size = new Size(87, 13);
-            label3.TabIndex = 0;
-            label3.Text = "version alpha 0.1";
-            label3.Click += label3_Click;
+            Lbl_Version.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point);
+            Lbl_Version.ForeColor = Color.FromArgb(128, 64, 0);
+            Lbl_Version.Location = new Point(12, 36);
+            Lbl_Version.Name = "Lbl_Version";
+            Lbl_Version.Size = new Size(188, 13);
+            Lbl_Version.TabIndex = 0;
+            Lbl_Version.Text = "version alpha 0.99";
+            Lbl_Version.TextAlign = ContentAlignment.MiddleRight;
+            Lbl_Version.Click += label3_Click;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1331, 667);
-            Controls.Add(label3);
+            Controls.Add(Lbl_Version);
             Controls.Add(Grp_Forms);
             Controls.Add(Btn_HomeConnect);
             Controls.Add(Lbl_NotConnected);
@@ -239,7 +239,7 @@
         private Label label2;
         private Label Lbl_NotConnected;
         private Button Btn_HomeConnect;
-        private Label label3;
+        private Label Lbl_Version;
         private ToolStripMenuItem ToolStripMenuItem_Disconnect;
     }
 }

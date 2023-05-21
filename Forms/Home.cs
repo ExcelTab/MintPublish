@@ -10,6 +10,7 @@ using Mint.Controls;
 using Mint.Properties;
 using Mint.Code;
 using System.Resources;
+using System.Reflection;
 
 namespace Mint
 {
@@ -21,6 +22,7 @@ namespace Mint
         public MainForm()
         {
             InitializeComponent();
+            Load_Version();
 
             // Load the last logged in User
             string User = Settings.Default.login;
@@ -40,8 +42,6 @@ namespace Mint
         {
             //Open the login form and dim the main form
             BlackOverlay blackOverlay = new BlackOverlay();
-            blackOverlay.Size = this.Size;
-            blackOverlay.Location = this.Location;
             blackOverlay.Show();
 
             Login login = new Login();
@@ -50,6 +50,7 @@ namespace Mint
             //Once the login form is closed
             blackOverlay.Close();
             this.Show();
+
             //TODO : capter si la personne a mis CANCEL sur le login et ne pas lancer ChangeUser
             if (Settings.Default.login != null)
             {
@@ -104,27 +105,36 @@ namespace Mint
 
                     // Get Label and Image from the Resources
                     ResourceManager rm = Resources.ResourceManager;
-                    appButton.Label = ModRow[0]["Label"].ToString();
-                    appButton.AppName = ModRow[0]["FormName"].ToString();
-                    Image ModImage = (Image)rm.GetObject(ModRow[0]["Image"].ToString());
-                    appButton.Image = ModImage;
-
-                    // Set the location of the control within the group box
-                    appButton.Location = new Point(x, y);
-
-                    // Add the control to the Grp_Apps group box
-                    Grp_Apps.Controls.Add(appButton);
-
-                    if (x == 10)
+                    //TODO: check if the mod still exists and if not, set the default logon
+                    try
                     {
-                        x = 10 + appButton.Width + 10;
+                        appButton.Label = ModRow[0]["Label"].ToString();
+                        appButton.AppName = ModRow[0]["FormName"].ToString();
+                        Image ModImage = (Image)rm.GetObject(ModRow[0]["Image"].ToString());
+                        appButton.Image = ModImage;
+                        // Set the location of the control within the group box
+                        appButton.Location = new Point(x, y);
+
+                        // Add the control to the Grp_Apps group box
+                        Grp_Apps.Controls.Add(appButton);
+
+                        if (x == 10)
+                        {
+                            x = 10 + appButton.Width + 10;
+                        }
+                        else
+                        {
+                            x = 10;
+                            y += appButton.Height + 10;
+                        }
+                        // Adjust the y coordinate for the next button
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        x = 10;
-                        y += appButton.Height + 10;
+                        MessageBox.Show("Please reconnect to the app: " + ex.Message);
                     }
-                    // Adjust the y coordinate for the next button
+
+
                 }
                 //Load default menu
                 this.Grp_Forms.Visible = false;
@@ -166,6 +176,18 @@ namespace Mint
             //Show the connect buttons on main screen
             this.Lbl_NotConnected.Visible = true;
             this.Btn_HomeConnect.Visible = true;
+        }
+
+        private void Load_Version()
+        {
+            // Get the entry assembly of the application
+            Assembly assembly = Assembly.GetEntryAssembly();
+
+            // Retrieve the assembly version
+            Version publishedVersion = assembly.GetName().Version;
+
+            // Display the version number
+            Lbl_Version.Text = "Version alpha : " + publishedVersion.ToString();
         }
     }
 }

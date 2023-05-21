@@ -41,6 +41,7 @@
             Opacity = 0.5D;
             StartPosition = FormStartPosition.Manual;
             Text = "BlackBox";
+            Load += BlackOverlay_Load;
             ResumeLayout(false);
         }
 

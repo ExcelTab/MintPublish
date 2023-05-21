@@ -35,6 +35,7 @@
             label2 = new Label();
             Lbo_Tables = new ListBox();
             Lbl_Charging = new Label();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)Dgv_Main).BeginInit();
             SuspendLayout();
             // 
@@ -109,11 +110,23 @@
             Lbl_Charging.TabIndex = 18;
             Lbl_Charging.Text = "Chargement des données... Veuillez patienter";
             // 
+            // button1
+            // 
+            button1.BackColor = Color.FromArgb(255, 192, 128);
+            button1.Location = new Point(828, 11);
+            button1.Name = "button1";
+            button1.Size = new Size(156, 23);
+            button1.TabIndex = 19;
+            button1.Text = "Update From Buffer";
+            button1.UseVisualStyleBackColor = false;
+            button1.Click += Refresh_Buffer;
+            // 
             // App_Database
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(996, 542);
+            Controls.Add(button1);
             Controls.Add(Lbl_Charging);
             Controls.Add(Lbo_Tables);
             Controls.Add(label2);
@@ -139,5 +152,6 @@
         private Label label2;
         private ListBox Lbo_Tables;
         private Label Lbl_Charging;
+        private Button button1;
     }
 }

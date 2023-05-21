@@ -69,7 +69,7 @@ namespace Mint
             //Verify if the User exists in the TBL_USER sql table
             string sCommand = "SELECT * FROM TBL_USERS WHERE Login = @login AND Password = @password";
 
-            using (SqlConnection connection = new SqlConnection(Database.MainConnectionString))
+            using (SqlConnection connection = new SqlConnection(Database.MainConnectionString()))
             {
                 SqlCommand command = new SqlCommand(sCommand, connection);
                 command.Parameters.AddWithValue("@login", TB_Login.Text);
