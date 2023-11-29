@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <configSections>
+        <sectionGroup name="userSettings" type="System.Configuration.UserSettingsGroup, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" >
+            <section name="Mint.Properties.Settings" type="System.Configuration.ClientSettingsSection, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" allowExeDefinition="MachineToLocalUser" requirePermission="false" />
+        </sectionGroup>
+    </configSections>
+    <userSettings>
+        <Mint.Properties.Settings>
+            <setting name="login" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="password" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="mods" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="productkey" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="glsPath" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="OFTemplatePath" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="printerPath" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="emailUser" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="emailPassword" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="emailSMTP" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="emailPort" serializeAs="String">
+                <value />
+            </setting>
+        </Mint.Properties.Settings>
+    </userSettings>
+</configuration>
