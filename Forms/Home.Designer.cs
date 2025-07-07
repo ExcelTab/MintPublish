@@ -35,15 +35,19 @@
             toolStripSeparator1 = new ToolStripSeparator();
             changeAccountToolStripMenuItem = new ToolStripMenuItem();
             ToolStripMenuItem_Disconnect = new ToolStripMenuItem();
+            toolStripSeparator2 = new ToolStripSeparator();
+            changeEmailSettingsToolStripMenuItem = new ToolStripMenuItem();
             Grp_Apps = new GroupBox();
             label1 = new Label();
             Grp_Forms = new GroupBox();
+            pictureBox_AppLoading = new PictureBox();
             pictureBox1 = new PictureBox();
-            label2 = new Label();
             Lbl_NotConnected = new Label();
             Btn_HomeConnect = new Button();
             Lbl_Version = new Label();
+            label_status = new Label();
             toolStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox_AppLoading).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -54,14 +58,14 @@
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.RightToLeft = RightToLeft.Yes;
-            toolStrip1.Size = new Size(1331, 23);
+            toolStrip1.Size = new Size(1284, 23);
             toolStrip1.TabIndex = 8;
             toolStrip1.Text = "toolStrip1";
             // 
             // toolStripDropDownButton2
             // 
             toolStripDropDownButton2.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripDropDownButton2.DropDownItems.AddRange(new ToolStripItem[] { Lbl_LoggedAs, toolStripSeparator1, changeAccountToolStripMenuItem, ToolStripMenuItem_Disconnect });
+            toolStripDropDownButton2.DropDownItems.AddRange(new ToolStripItem[] { Lbl_LoggedAs, toolStripSeparator1, changeAccountToolStripMenuItem, ToolStripMenuItem_Disconnect, toolStripSeparator2, changeEmailSettingsToolStripMenuItem });
             toolStripDropDownButton2.Image = Properties.Resources.account;
             toolStripDropDownButton2.ImageTransparentColor = Color.Magenta;
             toolStripDropDownButton2.Name = "toolStripDropDownButton2";
@@ -84,12 +88,12 @@
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(158, 6);
+            toolStripSeparator1.Size = new Size(188, 6);
             // 
             // changeAccountToolStripMenuItem
             // 
             changeAccountToolStripMenuItem.Name = "changeAccountToolStripMenuItem";
-            changeAccountToolStripMenuItem.Size = new Size(161, 22);
+            changeAccountToolStripMenuItem.Size = new Size(191, 22);
             changeAccountToolStripMenuItem.Text = "Change account";
             changeAccountToolStripMenuItem.Click += Open_Login_Form;
             // 
@@ -97,9 +101,21 @@
             // 
             ToolStripMenuItem_Disconnect.Enabled = false;
             ToolStripMenuItem_Disconnect.Name = "ToolStripMenuItem_Disconnect";
-            ToolStripMenuItem_Disconnect.Size = new Size(161, 22);
+            ToolStripMenuItem_Disconnect.Size = new Size(191, 22);
             ToolStripMenuItem_Disconnect.Text = "Disconnect";
             ToolStripMenuItem_Disconnect.Click += ToolStripMenuItem_Disconnect_Click;
+            // 
+            // toolStripSeparator2
+            // 
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(188, 6);
+            // 
+            // changeEmailSettingsToolStripMenuItem
+            // 
+            changeEmailSettingsToolStripMenuItem.Name = "changeEmailSettingsToolStripMenuItem";
+            changeEmailSettingsToolStripMenuItem.Size = new Size(191, 22);
+            changeEmailSettingsToolStripMenuItem.Text = "Change email settings";
+            changeEmailSettingsToolStripMenuItem.Click += changeEmailSettingsToolStripMenuItem_Click;
             // 
             // Grp_Apps
             // 
@@ -128,38 +144,39 @@
             Grp_Forms.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             Grp_Forms.BackgroundImageLayout = ImageLayout.None;
             Grp_Forms.FlatStyle = FlatStyle.Flat;
-            Grp_Forms.Location = new Point(217, 52);
+            Grp_Forms.Location = new Point(217, 23);
             Grp_Forms.Margin = new Padding(0);
             Grp_Forms.Name = "Grp_Forms";
             Grp_Forms.Padding = new Padding(0);
-            Grp_Forms.Size = new Size(1114, 610);
+            Grp_Forms.Size = new Size(1067, 639);
             Grp_Forms.TabIndex = 12;
             Grp_Forms.TabStop = false;
             Grp_Forms.Visible = false;
             // 
+            // pictureBox_AppLoading
+            // 
+            pictureBox_AppLoading.Anchor = AnchorStyles.None;
+            pictureBox_AppLoading.BorderStyle = BorderStyle.Fixed3D;
+            pictureBox_AppLoading.Cursor = Cursors.AppStarting;
+            pictureBox_AppLoading.Image = (Image)resources.GetObject("pictureBox_AppLoading.Image");
+            pictureBox_AppLoading.Location = new Point(571, 216);
+            pictureBox_AppLoading.Name = "pictureBox_AppLoading";
+            pictureBox_AppLoading.Size = new Size(315, 200);
+            pictureBox_AppLoading.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox_AppLoading.TabIndex = 18;
+            pictureBox_AppLoading.TabStop = false;
+            pictureBox_AppLoading.Visible = false;
+            // 
             // pictureBox1
             // 
             pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            pictureBox1.Image = Properties.Resources.BackGround_Blue;
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
             pictureBox1.Location = new Point(217, 60);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(1111, 599);
-            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox1.Size = new Size(1064, 599);
+            pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
             pictureBox1.TabIndex = 13;
             pictureBox1.TabStop = false;
-            // 
-            // label2
-            // 
-            label2.Anchor = AnchorStyles.Top;
-            label2.AutoSize = true;
-            label2.BackColor = Color.Transparent;
-            label2.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point);
-            label2.ForeColor = Color.FromArgb(0, 64, 0);
-            label2.Location = new Point(648, 92);
-            label2.Name = "label2";
-            label2.Size = new Size(237, 32);
-            label2.TabIndex = 14;
-            label2.Text = "Bienvenue sur Mint";
             // 
             // Lbl_NotConnected
             // 
@@ -167,7 +184,7 @@
             Lbl_NotConnected.BackColor = Color.Transparent;
             Lbl_NotConnected.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
             Lbl_NotConnected.ForeColor = Color.FromArgb(0, 64, 0);
-            Lbl_NotConnected.Location = new Point(614, 229);
+            Lbl_NotConnected.Location = new Point(591, 229);
             Lbl_NotConnected.Name = "Lbl_NotConnected";
             Lbl_NotConnected.Size = new Size(305, 84);
             Lbl_NotConnected.TabIndex = 15;
@@ -181,7 +198,7 @@
             Btn_HomeConnect.FlatStyle = FlatStyle.Popup;
             Btn_HomeConnect.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point);
             Btn_HomeConnect.ForeColor = SystemColors.ButtonHighlight;
-            Btn_HomeConnect.Location = new Point(692, 342);
+            Btn_HomeConnect.Location = new Point(669, 342);
             Btn_HomeConnect.Name = "Btn_HomeConnect";
             Btn_HomeConnect.Size = new Size(148, 57);
             Btn_HomeConnect.TabIndex = 16;
@@ -199,18 +216,31 @@
             Lbl_Version.TabIndex = 0;
             Lbl_Version.Text = "version alpha 0.99";
             Lbl_Version.TextAlign = ContentAlignment.MiddleRight;
-            Lbl_Version.Click += label3_Click;
+            Lbl_Version.Click += Lbl_Version_Click;
+            // 
+            // label_status
+            // 
+            label_status.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            label_status.BackColor = Color.Yellow;
+            label_status.BorderStyle = BorderStyle.FixedSingle;
+            label_status.Location = new Point(0, 645);
+            label_status.Name = "label_status";
+            label_status.Size = new Size(1284, 23);
+            label_status.TabIndex = 17;
+            label_status.Text = "Mise à jour des données ...";
+            label_status.Visible = false;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1331, 667);
+            ClientSize = new Size(1284, 667);
+            Controls.Add(pictureBox_AppLoading);
+            Controls.Add(label_status);
             Controls.Add(Lbl_Version);
             Controls.Add(Grp_Forms);
             Controls.Add(Btn_HomeConnect);
             Controls.Add(Lbl_NotConnected);
-            Controls.Add(label2);
             Controls.Add(pictureBox1);
             Controls.Add(label1);
             Controls.Add(Grp_Apps);
@@ -219,8 +249,10 @@
             MinimumSize = new Size(600, 500);
             Name = "MainForm";
             Text = "Mint";
+            WindowState = FormWindowState.Maximized;
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox_AppLoading).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -236,10 +268,13 @@
         private GroupBox Grp_Forms;
         private ToolStripMenuItem Lbl_LoggedAs;
         private PictureBox pictureBox1;
-        private Label label2;
         private Label Lbl_NotConnected;
         private Button Btn_HomeConnect;
         private Label Lbl_Version;
         private ToolStripMenuItem ToolStripMenuItem_Disconnect;
+        private Label label_status;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripMenuItem changeEmailSettingsToolStripMenuItem;
+        private PictureBox pictureBox_AppLoading;
     }
 }

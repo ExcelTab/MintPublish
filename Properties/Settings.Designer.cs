@@ -70,5 +70,101 @@ namespace Mint.Properties {
                 this["productkey"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string glsPath {
+            get {
+                return ((string)(this["glsPath"]));
+            }
+            set {
+                this["glsPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string OFTemplatePath {
+            get {
+                return ((string)(this["OFTemplatePath"]));
+            }
+            set {
+                this["OFTemplatePath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string printerPath {
+            get {
+                return ((string)(this["printerPath"]));
+            }
+            set {
+                this["printerPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string emailUser {
+            get {
+                return ((string)(this["emailUser"]));
+            }
+            set {
+                this["emailUser"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string emailPassword {
+            get {
+                return ((string)(this["emailPassword"]));
+            }
+            set {
+                this["emailPassword"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string emailSMTP {
+            get {
+                return ((string)(this["emailSMTP"]));
+            }
+            set {
+                this["emailSMTP"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string emailPort {
+            get {
+                return ((string)(this["emailPort"]));
+            }
+            set {
+                this["emailPort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string artistPath {
+            get {
+                return ((string)(this["artistPath"]));
+            }
+            set {
+                this["artistPath"] = value;
+            }
+        }
     }
 }

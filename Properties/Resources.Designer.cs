@@ -22,7 +22,7 @@ namespace Mint.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Mint.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Mint.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace Mint.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Mint.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap account {
+        public static System.Drawing.Bitmap account {
             get {
                 object obj = ResourceManager.GetObject("account", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -73,7 +73,7 @@ namespace Mint.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap BackGround_Blue {
+        public static System.Drawing.Bitmap BackGround_Blue {
             get {
                 object obj = ResourceManager.GetObject("BackGround_Blue", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -83,7 +83,67 @@ namespace Mint.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap HEXOA_ACCOUNTS {
+        public static System.Drawing.Bitmap ClearSort {
+            get {
+                object obj = ResourceManager.GetObject("ClearSort", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap detail {
+            get {
+                object obj = ResourceManager.GetObject("detail", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Douchette {
+            get {
+                object obj = ResourceManager.GetObject("Douchette", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap FilterOff {
+            get {
+                object obj = ResourceManager.GetObject("FilterOff", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap FilterOn {
+            get {
+                object obj = ResourceManager.GetObject("FilterOn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap folder {
+            get {
+                object obj = ResourceManager.GetObject("folder", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HEXOA_ACCOUNTS {
             get {
                 object obj = ResourceManager.GetObject("HEXOA_ACCOUNTS", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -93,7 +153,7 @@ namespace Mint.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap HEXOA_DATABASE {
+        public static System.Drawing.Bitmap HEXOA_DATABASE {
             get {
                 object obj = ResourceManager.GetObject("HEXOA_DATABASE", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -103,7 +163,7 @@ namespace Mint.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap HEXOA_ORDERS {
+        public static System.Drawing.Bitmap HEXOA_ORDERS {
             get {
                 object obj = ResourceManager.GetObject("HEXOA_ORDERS", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -113,7 +173,17 @@ namespace Mint.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap HEXOA_PRODUCTS {
+        public static System.Drawing.Bitmap HEXOA_PEOPLE {
+            get {
+                object obj = ResourceManager.GetObject("HEXOA_PEOPLE", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HEXOA_PRODUCTS {
             get {
                 object obj = ResourceManager.GetObject("HEXOA_PRODUCTS", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -121,9 +191,49 @@ namespace Mint.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HEXOA_REPORTS {
+            get {
+                object obj = ResourceManager.GetObject("HEXOA_REPORTS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap location {
+            get {
+                object obj = ResourceManager.GetObject("location", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap mini_detail {
+            get {
+                object obj = ResourceManager.GetObject("mini_detail", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap ofIcon {
+            get {
+                object obj = ResourceManager.GetObject("ofIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] OrderTemplatePDF {
+        public static byte[] OrderTemplatePDF {
             get {
                 object obj = ResourceManager.GetObject("OrderTemplatePDF", resourceCulture);
                 return ((byte[])(obj));
@@ -133,9 +243,9 @@ namespace Mint.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap TEst {
+        public static System.Drawing.Bitmap SortAsc {
             get {
-                object obj = ResourceManager.GetObject("TEst", resourceCulture);
+                object obj = ResourceManager.GetObject("SortAsc", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -143,7 +253,27 @@ namespace Mint.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap users {
+        public static System.Drawing.Bitmap SortDesc {
+            get {
+                object obj = ResourceManager.GetObject("SortDesc", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] Template_DA {
+            get {
+                object obj = ResourceManager.GetObject("Template_DA", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap users {
             get {
                 object obj = ResourceManager.GetObject("users", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));

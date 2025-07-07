@@ -8,11 +8,22 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>Mint_41081.ico</ApplicationIcon>
     <StartupObject>Mint.Code.Program</StartupObject>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>C:\Users\Simon\OneDrive\Documents\ExcelTab\Mint_Hexoa.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <IsPublishable>True</IsPublishable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <IsPublishable>True</IsPublishable>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Comments" />
     <None Remove="Resources\Order Template.pdf" />
+    <None Remove="Resources\Template DA.xlsx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,10 +36,13 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\Order Template.pdf" />
+    <EmbeddedResource Include="Resources\Template DA.xlsx" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="itext7" Version="7.2.5" />
+    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="13.3.0" />
+    <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1001" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageReference Include="WinForms.DataVisualization" Version="1.8.0" />
   </ItemGroup>
@@ -57,7 +71,7 @@
 
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

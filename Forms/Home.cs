@@ -11,31 +11,130 @@ using Mint.Properties;
 using Mint.Code;
 using System.Resources;
 using System.Reflection;
+using System.Diagnostics;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Mint.Forms;
 
 namespace Mint
 {
     public partial class MainForm : Form
     {
-
         public string sLoggedAs;
+        // Declare a Timer object at the class level
+
+
+
 
         public MainForm()
         {
             InitializeComponent();
             Load_Version();
+            Database.StatusUpdate += StatusUpdateHandler;
+            Print.StatusUpdate += StatusUpdateHandler;
+            App_Orders.StatusUpdate += StatusUpdateHandler;
+            App_Orders.WaitUpdate += WaitUpdateHandler;
+            App_Products.StatusUpdate += StatusUpdateHandler;
+            App_Reports.StatusUpdate += StatusUpdateHandler;
+            AppButton.WaitUpdate += WaitUpdateHandler;
 
             // Load the last logged in User
             string User = Settings.Default.login;
-            if (User == string.Empty)
+            if (User == string.Empty) { Lbl_LoggedAs.Text = "Not logged in"; }
+            else { Change_User(true); }
+
+            // Update from Buffer
+            UpdateDatabases();
+
+        }
+
+        private void StatusUpdateHandler(string status)
+        {
+            if (label_status.InvokeRequired)
             {
-                Lbl_LoggedAs.Text = "Not logged in";
+                // If called from a different thread, use Invoke to update UI
+                label_status.Invoke(new MethodInvoker(delegate
+                {
+                    if (string.IsNullOrEmpty(status))
+                    {
+                        if (label_status.Visible)
+                        {
+                            label_status.Visible = false;
+                        }
+                    }
+                    else
+                    {
+                        if (!label_status.Visible)
+                        {
+                            label_status.Visible = true;
+                        }
+                        label_status.Text = status;
+                    }
+                }));
             }
             else
             {
-                Change_User();
+                // If called from the UI thread, update directly
+                if (string.IsNullOrEmpty(status))
+                {
+                    if (label_status.Visible)
+                    {
+                        label_status.Visible = false;
+                    }
+                }
+                else
+                {
+                    if (!label_status.Visible)
+                    {
+                        label_status.Visible = true;
+                    }
+                    label_status.Text = status;
+                }
             }
         }
-
+        private void WaitUpdateHandler(bool wait)
+        {
+            if (pictureBox_AppLoading.InvokeRequired)
+            {
+                // If called from a different thread, use Invoke to update UI
+                pictureBox_AppLoading.Invoke(new MethodInvoker(delegate
+                {
+                    if (wait == false)
+                    {
+                        if (pictureBox_AppLoading.Visible)
+                        {
+                            pictureBox_AppLoading.Visible = false;
+                        }
+                    }
+                    else
+                    {
+                        if (!pictureBox_AppLoading.Visible)
+                        {
+                            pictureBox_AppLoading.BringToFront();
+                            pictureBox_AppLoading.Visible = true;
+                        }
+                    }
+                }));
+            }
+            else
+            {
+                // If called from the UI thread, update directly
+                if (wait == false)
+                {
+                    if (pictureBox_AppLoading.Visible)
+                    {
+                        pictureBox_AppLoading.Visible = false;
+                    }
+                }
+                else
+                {
+                    if (!pictureBox_AppLoading.Visible)
+                    {
+                        pictureBox_AppLoading.BringToFront();
+                        pictureBox_AppLoading.Visible = true;
+                    }
+                }
+            }
+        }
 
 
         private void Open_Login_Form(object sender, EventArgs e)
@@ -67,10 +166,10 @@ namespace Mint
 
         }
 
-        private void Change_User()
+        private void Change_User(bool forceReload = false)
         {
             //Check if the user is new or not
-            if (Settings.Default.login != Lbl_LoggedAs.Text)
+            if (Settings.Default.login != Lbl_LoggedAs.Text || forceReload == true)
             {
                 //Change the label on the top right button
                 Lbl_LoggedAs.Text = Settings.Default.login;
@@ -79,11 +178,15 @@ namespace Mint
                 //Load the apps
 
                 //Split the mods setting string into an array delimited by a semicolumn
+                if (forceReload == true) { Reload_Mods(); }
                 string sMods = Settings.Default.mods;
 
                 // Split the string into a list of strings
-                List<string> sModList = sMods.Split(';').ToList();
-
+                List<string> sModList = null;
+                if (sMods.Contains(";")) { sModList = sMods.Split(';').ToList(); }
+                else if (sMods.Contains(",")) { sModList = sMods.Split(',').ToList(); }
+                else { sModList = new List<string> { sMods }; }
+                
                 // Clear all controls of the Grp_Apps group box
                 Grp_Apps.Controls.Clear();
 
@@ -151,11 +254,6 @@ namespace Mint
 
         }
 
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void Lbl_LoggedAs_Click(object sender, EventArgs e)
         {
 
@@ -180,14 +278,111 @@ namespace Mint
 
         private void Load_Version()
         {
-            // Get the entry assembly of the application
-            Assembly assembly = Assembly.GetEntryAssembly();
 
-            // Retrieve the assembly version
-            Version publishedVersion = assembly.GetName().Version;
+            // Get the ClickOnce deployment version, if live
+            string clickOnceVersion = Application.ProductVersion;
 
-            // Display the version number
-            Lbl_Version.Text = "Version alpha : " + publishedVersion.ToString();
+            //TODO  : fonctionnerait en .Net 7 ?
+            clickOnceVersion = Environment.GetEnvironmentVariable("ClickOnce_CurrentVersion");
+            if (clickOnceVersion != null) { Lbl_Version.Text = "Version : " + clickOnceVersion.ToString().Replace("1.1.",""); }
+            //Lbl_Version.Text = "Version alpha: 4.02.10";
+        }
+
+        private void Lbl_Version_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private async void UpdateDatabases()
+        {
+            try
+            {
+                //Load from buffer to main
+                await Task.Run(async () => { await Database.LoadDataFromBufferToMain(true); });
+
+                //Store the id_article to increase performance
+                await Task.Run(async () => { await App_Orders.StoreIDArticleLocally(); });
+
+                //Consume the rawmat and store local costs of production
+                await Task.Run(async () => { await App_Orders.ConsumeRawMatsAndStoreCost(); });
+
+                //Change to "livré mkp" the old orders
+                await Task.Run(async () => { await App_Orders.UpdateOldOrderStates(); });
+
+                //If the TBL_PRODUCT table last transfer date is more than 15 days, then launch the CompareProductList sub 
+                String lastTransferDate  = Database.GetFieldFromField("CATALOG_TABLES", "table_name", "TBL_PRODUCT", "last_transfer_date");
+                if (!string.IsNullOrEmpty(lastTransferDate))
+                {
+                    DateTime lastTransferDateDT = Convert.ToDateTime(lastTransferDate);
+                    if (DateTime.Now.Subtract(lastTransferDateDT).TotalDays > 15)
+                    {
+                        await Task.Run(async () => { await App_Products.CompareProductLists(); });
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                MessageBox.Show($"An error occurred: {ex.Message}");
+            }
+        }
+
+        private void changeEmailSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Open the login form and dim the main form
+            BlackOverlay blackOverlay = new BlackOverlay();
+            blackOverlay.Show();
+
+            EmailConfig emailConfig = new EmailConfig();
+            emailConfig.ShowDialog();
+
+            //Once the login form is closed
+            blackOverlay.Close();
+            this.Show();
+
+
+        }
+
+        private void Reload_Mods()
+        {
+            //Verify if the User exists in the TBL_USER sql table
+            string sCommand = "SELECT * FROM TBL_USERS WHERE login = @login AND password = @password";
+
+            using (SqlConnection connection = new SqlConnection(Database.MainConnectionString()))
+            {
+                SqlCommand command = new SqlCommand(sCommand, connection);
+                command.Parameters.AddWithValue("@login", Settings.Default.login);
+                command.Parameters.AddWithValue("@password", Settings.Default.password);
+
+                // Try to open the connection, but catch any exceptions
+                try
+                {
+                    connection.Open();
+                }
+                catch (Exception ex)
+                {
+                    // TODO : si un problème de sauvegarde de la clé produit, il ne sait pas se connecter. Renvoyer le prompt clé produit
+                    MessageBox.Show("La connection à la base de donnée est impossible :  " + ex.Message, "Erreur de connection", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    // Move to the first (and only) row in the result set
+                    reader.Read();
+                    Properties.Settings.Default.mods = reader["mods"].ToString();
+                    Properties.Settings.Default.Save();
+                }
+                else
+                {
+                    // user does not exist in TBL_USER, show error message
+                    MessageBox.Show("Invalid login or password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                reader.Close();
+            }
         }
     }
 }

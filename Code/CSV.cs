@@ -1,6 +1,7 @@
 ﻿using iText.Kernel.Geom;
 using System.Data;
 using System.IO;
+using System.Text;
 
 namespace Mint.Code
 {
@@ -29,7 +30,7 @@ namespace Mint.Code
 
 
             // Create a new StreamWriter and specify the file path
-            using (StreamWriter writer = new StreamWriter(filePath,false))
+            using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8))
             {
                 // Write the column headers
                 foreach (DataColumn column in dt.Columns)

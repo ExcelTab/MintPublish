@@ -17,6 +17,10 @@ namespace Mint.Controls
     public partial class AppButton : UserControl
     {
 
+        public delegate void WaitDelegate(bool wait);
+        public static event WaitDelegate WaitUpdate;
+
+
         //Get Home form groupbox object for docking
         private MainForm For_Main;
         private string App_Name;
@@ -53,7 +57,7 @@ namespace Mint.Controls
         }
 
 
-        private void App_Click(object sender, EventArgs e)
+        private async void App_Click(object sender, EventArgs e)
         {
             // Open the specific App
             System.Windows.Forms.GroupBox AppBox = (System.Windows.Forms.GroupBox)For_Main.Controls["Grp_Forms"];
@@ -63,26 +67,41 @@ namespace Mint.Controls
             {
                 // TODO: verify if an instance of the form is already open
                 // and if so, bring it to the front
+                await Task.Run(async () => { await LoadForm(AppBox,formType); });
 
-                Form form = (Form)Activator.CreateInstance(formType);
-                if (AppBox != null)
-                {
-                    AppBox.Visible = true;
+            }
+            else
+            {
+                // Handle case when form type is not found
+                AppBox.Visible = false;
+                MessageBox.Show("Cette application n'est pas encore disponible", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);      
+            }
+        }
+
+        private async Task LoadForm(System.Windows.Forms.GroupBox AppBox,Type formType)
+        {
+            WaitUpdate?.Invoke(true);
+            
+            if (AppBox != null)
+            {
+                AppBox.Invoke((MethodInvoker)delegate {
+                    Form form = (Form)Activator.CreateInstance(formType);
+                    if (AppBox.Controls.Count > 0 && AppBox.Controls[0] is Form previousForm)
+                    {
+                        previousForm.Close();
+                        previousForm.Dispose();
+                    }
+
                     AppBox.Controls.Clear(); // Clear all current controls in the groupbox
                     form.TopLevel = false;
                     form.FormBorderStyle = FormBorderStyle.None;
                     form.Dock = DockStyle.Fill;
                     AppBox.Controls.Add(form);
                     form.Show();
-                }
+                    AppBox.Visible = true;
+                });
             }
-            else
-            {
-                // Handle case when form type is not found
-                AppBox.Visible = false;
-                MessageBox.Show("Cette application n'est pas encore disponible", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);                
-
-            }
+            WaitUpdate?.Invoke(false);
         }
     }
 }

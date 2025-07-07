@@ -1,5 +1,6 @@
 ﻿using System.Data.SqlClient;
 using Mint.Code;
+using Mint.Properties;
 
 namespace Mint
 {
@@ -63,11 +64,10 @@ namespace Mint
             }
         }
 
-
-        private void BtnLoginOK_Click(object sender, EventArgs e)
+        private void Load_Login()
         {
             //Verify if the User exists in the TBL_USER sql table
-            string sCommand = "SELECT * FROM TBL_USERS WHERE Login = @login AND Password = @password";
+            string sCommand = "SELECT * FROM TBL_USERS WHERE login = @login AND password = @password";
 
             using (SqlConnection connection = new SqlConnection(Database.MainConnectionString()))
             {
@@ -75,7 +75,22 @@ namespace Mint
                 command.Parameters.AddWithValue("@login", TB_Login.Text);
                 command.Parameters.AddWithValue("@password", TB_Password.Text);
 
-                connection.Open();
+                // Try to open the connection, but catch any exceptions
+                try
+                {
+                    connection.Open();
+                }
+                catch (Exception ex)
+                {
+                    // TODO : si un problème de sauvegarde de la clé produit, il ne sait pas se connecter. Renvoyer le prompt clé produit
+                    MessageBox.Show("La clé produit est invalide : " + Settings.Default.productkey + ". Ceci génère l'erreur suivante : " + ex.Message, "Erreur de connection", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Settings.Default.productkey = string.Empty;
+                    Settings.Default.Save();
+                    // Relaunch the procedure
+                    Load_Login();
+
+                }
+
                 SqlDataReader reader = command.ExecuteReader();
                 if (reader.HasRows)
                 {
@@ -87,7 +102,7 @@ namespace Mint
                     Properties.Settings.Default.login = this.TB_Login.Text;
                     Properties.Settings.Default.password = this.TB_Password.Text;
                     //Load the Mods column of the Reader into the settings
-                    Properties.Settings.Default.mods = reader["Mods"].ToString();
+                    Properties.Settings.Default.mods = reader["mods"].ToString();
                     Properties.Settings.Default.Save();
 
                     //TODO: Figure out how to hide the login form without it hiding the main form
@@ -102,6 +117,11 @@ namespace Mint
                 }
                 reader.Close();
             }
+        }
+
+        private void BtnLoginOK_Click(object sender, EventArgs e)
+        {
+            Load_Login();
         }
         private void BtnLoginCancel_Click(object sender, EventArgs e)
         {

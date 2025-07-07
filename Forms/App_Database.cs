@@ -37,12 +37,14 @@ namespace Mint.Forms
             // if sDatabase is not null, then load the tables
             if (!string.IsNullOrEmpty(sDatabase))
             {
-                List<string> tableList = Database.LoadDatatables(sDatabase);
+                bool bBuffer = false;
+                if (sDatabase == "Hexoa Buffer") { bBuffer = true; }
+                List<string> tableList = Database.LoadDatatables(bBuffer);
                 Lbo_Tables.DataSource = tableList;
             }
         }
 
-        private async void Refresh_Datatable(object sender, EventArgs e)
+        private void Refresh_Datatable(object sender, EventArgs e)
         {
             //Hide the Gridview while loading
             Lbl_Charging.Visible = true;
@@ -52,13 +54,24 @@ namespace Mint.Forms
             string login = Properties.Settings.Default.login;
             string password = Properties.Settings.Default.password;
             string sDatabase = Cbb_Database.SelectedItem.ToString();
-            string sTable = Lbo_Tables.SelectedItem.ToString();
+            bool bBuffer = false;
+            if (sDatabase == "Hexoa Buffer") { bBuffer = true; }
+            string sTable = "";
+            if (Lbo_Tables.SelectedItem != null)
+            {
+                sTable = Lbo_Tables.SelectedItem.ToString();
+            }
+            else
+            {
+                return; //Car peut etre en cours de changement de liste
+            }
+
             string connectionString;
             if (login == "simonghislain") { connectionString = $"Server=tcp:exceltab.database.windows.net,1433;Initial Catalog={sDatabase};Persist Security Info=False;User ID={login};Password={password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"; }
-            else { connectionString = Database.MainConnectionString(); }
+            else { connectionString = bBuffer ? Database.BufferConnectionString() : Database.MainConnectionString(); }
 
             SqlConnection connection = new SqlConnection(connectionString);
-            await connection.OpenAsync();
+            connection.Open();
             string query = $"SELECT * FROM {sTable};";
             SqlCommand command = new SqlCommand(query, connection);
             adapter = new SqlDataAdapter(command);
@@ -90,7 +103,7 @@ namespace Mint.Forms
         private void Refresh_Buffer(object sender, EventArgs e)
         {
             //Upload all data from the datagridview that was modified by the user to the SQL database
-            Database.LoadDataFromBuffferToMain();
+            Database.LoadDataFromBufferToMain(false);
         }
 
 

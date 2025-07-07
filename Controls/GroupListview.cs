@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using static System.Windows.Forms.ListViewItem;
 
 namespace Mint.Controls
 {
@@ -22,44 +23,34 @@ namespace Mint.Controls
             Lbl_Header.Text = header;
             //Load the listview
             // Add columns to the ListView
-            foreach (DataColumn column in dt.Columns)
-            {
-                Lvi_List.Columns.Add(column.ColumnName);
-            }
-
-            // Add rows to the ListView
-            foreach (DataRow row in dt.Rows)
-            {
-                ListViewItem item = new ListViewItem(row.ItemArray.Select(x => x.ToString()).ToArray());
-                Lvi_List.Items.Add(item);
-            }
-
+            dataGridView_List.DataSource = dt;
 
             ExpandOrColapse();
         }
 
         public void Clear_Selection()
         {
-            Lvi_List.BeginUpdate();
-            foreach (ListViewItem item in Lvi_List.Items)
+            // unselects all item from the datagridview
+            foreach (DataGridViewRow row in dataGridView_List.Rows)
             {
-                item.Checked = false;
+                row.Selected = false;
             }
-            Lvi_List.EndUpdate();
         }
 
         public void Select_Data(string[] data)
         {
-            Lvi_List.BeginUpdate();
-            //loop through the listview and check the items that are in the data array. THe value to chec is the ID, in the first column
-            foreach (ListViewItem item in Lvi_List.Items)
+
+            // Loop through the DataGridView and check the items that are in the data array.
+            // The value to check is the ID, in the first column (index 0).
+            foreach (DataGridViewRow row in dataGridView_List.Rows)
             {
-                if (data.Contains(item.SubItems[0].Text))
+                if (row.Cells[0].Value != null && data.Contains(row.Cells[0].Value.ToString()))
                 {
-                    item.Checked = true;
+                    // If the data array contains the value in the first column, check the row.
+                    row.Selected = true; // Select the row
+                    row.Cells[0].Selected = false; // Deselect the cell in the first column (optional)
                 }
             }
-            Lvi_List.EndUpdate();
         }
 
         private void ExpandOrColapse()
@@ -67,19 +58,20 @@ namespace Mint.Controls
             if (Lbl_PlusMinus.Text == "+")
             {
                 Lbl_PlusMinus.Text = "-";
-                Lvi_List.Visible = true;
+                dataGridView_List.Visible = true;
                 ////Resize the list form
-                Lvi_List.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
                 //ajust the height of the listview based on number of items
-                int MaxHeight = (Lvi_List.Items.Count + 1) * Lvi_List.Items[0].Bounds.Height;
-                //if (MaxHeight > 350) { MaxHeight = 350; }
-                Lvi_List.Height = MaxHeight;
-                this.Height = Lbl_PlusMinus.Height + Lvi_List.Height + 20;
+                int MaxHeight = (dataGridView_List.Rows.Count * dataGridView_List.Rows[0].Height) + dataGridView_List.ColumnHeadersHeight+10;
+                int ParentHeight = this.Parent.Height;
+                if (MaxHeight + Lbl_PlusMinus.Height > ParentHeight) { MaxHeight = ParentHeight - Lbl_PlusMinus.Height; }
+                dataGridView_List.Height = MaxHeight;
+                dataGridView_List.Top = Lbl_PlusMinus.Height;
+                this.Height = Lbl_PlusMinus.Height + dataGridView_List.Height + 20;
             }
             else
             {
                 Lbl_PlusMinus.Text = "+";
-                Lvi_List.Visible = false;
+                dataGridView_List.Visible = false;
                 this.Height = Lbl_PlusMinus.Height;
             }
         }
@@ -89,36 +81,9 @@ namespace Mint.Controls
             ExpandOrColapse();
         }
 
-        private void Lvi_List_ItemChecked(object sender, ItemCheckedEventArgs e)
+        private void Lbl_Header_Click(object sender, EventArgs e)
         {
-            ListViewItem item = e.Item;
-
-            if (item.Checked)
-            {
-                item.ForeColor = Color.White;  // Set font color to white
-                item.BackColor = Color.DarkGreen;  // Set background color to dark green
-                outputTags.Add(item.SubItems[0].Text); // Add the first subitem to the output_Tags list
-            }
-            else
-            {
-                item.ForeColor = Lvi_List.ForeColor;  // Set font color back to default
-                item.BackColor = Lvi_List.BackColor;  // Set background color back to default
-                outputTags.Remove(item.SubItems[0].Text); // Remove the first subitem to the output_Tags list
-            }
-        }
-
-        private void Lvi_List_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
-        {
-            ListViewItem item = e.Item;
-
-            if (item.Selected)
-            {
-                item.Checked = !item.Checked;  // Toggle the checked state
-                item.Selected = false;
-            }
-
 
         }
-
     }
 }

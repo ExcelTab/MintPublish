@@ -23,8 +23,9 @@ namespace Mint.Code
             // Add the rows to the ModInfo table
             ModLibrary.Rows.Add("HEXOA_ORDERS", "Orders", "HEXOA_ORDERS","Commandes");
             ModLibrary.Rows.Add("HEXOA_DATABASE", "Database", "HEXOA_DATABASE","Afficher la DB");
-            ModLibrary.Rows.Add("HEXOA_ACCOUNTS", "Accounts", "HEXOA_ACCOUNTS","Utilisateurs");
+            ModLibrary.Rows.Add("HEXOA_PEOPLE", "User", "HEXOA_PEOPLE", "Personnel");
             ModLibrary.Rows.Add("HEXOA_PRODUCTS", "Products", "HEXOA_PRODUCTS", "Produits");
+            ModLibrary.Rows.Add("HEXOA_REPORTS", "Reports", "HEXOA_REPORTS", "Rapports");
         }
 
 

@@ -16,9 +16,12 @@ namespace Mint.Forms
 {
     public partial class ListTable : Form
     {
+        public string Text_Old;
         public string Text_Selected;
+        public string ID_Old;
         public string ID_Selected;
-        public int ViewMode;
+        public string ViewMode = "ListView";
+        public bool MultiSelect = false;
         private DataTable listDataTable;
 
         public ListTable()
@@ -28,17 +31,23 @@ namespace Mint.Forms
 
         private void Liv_List_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ID_Selected = Lvi_List.SelectedItems[0].SubItems[0].Text;
-            Text_Selected = Lvi_List.SelectedItems[0].SubItems[1].Text;
+            if (!MultiSelect)
+            {
+                ID_Selected = Lvi_List.SelectedItems[0].SubItems[0].Text;
+                Text_Selected = Lvi_List.SelectedItems[0].SubItems[1].Text;
 
-            this.Close();
+                this.Close();
+            }
+;
         }
         private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            ID_Selected = e.Node.Tag.ToString();
-            Text_Selected = e.Node.Text;
-
-            this.Close();
+            if (!MultiSelect)
+            {
+                ID_Selected = e.Node.Tag.ToString();
+                Text_Selected = e.Node.Text;
+                this.Close();
+            }
         }
         public void Set_Title(string title)
         {
@@ -93,20 +102,28 @@ namespace Mint.Forms
             return nodeWidth;
         }
 
-
-
-
         public void Load_List(string query)
         {
+            if (MultiSelect)
+            {
+                Lvi_List.CheckBoxes = true;
+                Lvi_List.MultiSelect = true;
+                button_OK.Visible = true;
+                //Also enable multiple selection in the treeview
+                Trv_List.CheckBoxes = true;
+
+            }
+
             SqlConnection connection = new SqlConnection(Database.MainConnectionString());
             connection.Open();
 
             SqlCommand command = new SqlCommand(query, connection);
 
 
+
             switch (ViewMode)
             {
-                case 1:
+                case "TreeView":
                     //Tree View
                     Trv_List.BringToFront();
                     // Create a data adapter to fill the category data into a DataTable
@@ -147,7 +164,7 @@ namespace Mint.Forms
                     }
                     break;
 
-                default:
+                case "ListView":
                     //List View
                     SqlDataReader reader = command.ExecuteReader();
                     Lvi_List.BringToFront();
@@ -193,6 +210,70 @@ namespace Mint.Forms
                     break;
             }
             Lbl_ListTitle.Width = this.Width;
+
+
         }
+
+        private void button_Cancel_Click(object sender, EventArgs e)
+        {
+            Text_Selected = Text_Old;
+            ID_Selected = ID_Old;
+            this.Close();
+        }
+
+        private void button_OK_Click(object sender, EventArgs e)
+        {
+            //Only visible in case of multiselect
+            switch (ViewMode)
+            {
+                case "TreeView":
+
+                    //Lire toutes les nodes cochées
+                    List<string> selectedNodesID = new List<string>();
+                    List<string> selectedNodesNames = new List<string>();
+                    foreach (TreeNode node in Trv_List.Nodes)
+                    {
+                        if (node.Checked) { 
+                            selectedNodesID.Add(node.Tag.ToString());
+                            selectedNodesNames.Add(node.Text.ToString());
+                        }
+                        ReadTreeView(node, selectedNodesID, selectedNodesNames);
+                    }
+                    ID_Selected = string.Join(",", selectedNodesID);
+                    Text_Selected = string.Join(",", selectedNodesNames);
+
+                    break;
+
+                case "ListView":
+            
+                    foreach (ListViewItem item in Lvi_List.Items)
+                    {
+                        if (item.Checked)
+                        {
+                            ID_Selected += item.SubItems[0].Text + ", ";
+                            Text_Selected += item.SubItems[1].Text + ", ";
+                        }
+                    }
+                    ID_Selected = ID_Selected.Remove(ID_Selected.Length - 2);
+                    Text_Selected = Text_Selected.Remove(Text_Selected.Length - 2);
+                    break;
+            }
+            this.Close();
+        }
+
+        private void ReadTreeView(TreeNode parentNode, List<string> selectedNodesID, List<string> selectedNodesNames)
+        {
+            foreach (TreeNode node in parentNode.Nodes)
+            {
+                if (node.Checked)
+                {
+                    selectedNodesID.Add(node.Tag.ToString());
+                    selectedNodesNames.Add(node.Text.ToString());
+                }
+                // Recursively process child nodes
+                ReadTreeView(node, selectedNodesID, selectedNodesNames);
+            }
+        }
+
     }
 }
