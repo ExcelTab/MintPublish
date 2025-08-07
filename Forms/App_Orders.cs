@@ -154,8 +154,17 @@ namespace Mint.Forms
             if (i_end == dt.Rows.Count)
             {
                 if (i_exp == dt.Rows.Count) { i_state = 4; } //Livraison en cours (sera marqué Livrée par Prestashop
-                else if (i_exp == 0) { i_state = 6; } //Annulé
                 else if (i_exp > 0) { i_state = 34; } //Livrée avec partie annulée
+
+                //Modif 07/08/2025 : si annulé, vérifié si en cours de prod ou pas, et mettre 34 ou 35 plutôt que 6
+                else if (i_exp == 0)
+                {
+
+                    if (new[] { "3", "4", "5", "20" }.Contains(current_order_state)) { i_state = 34; } // Annulation avec prod  
+                    else { i_state = 35; }; //Annulation sans prod
+                    //i_state = 6; //Annulé
+                } 
+               
             }
             else
             {
@@ -167,6 +176,7 @@ namespace Mint.Forms
             //Check if the order is already in this state
             if (current_order_state != i_state.ToString())
             {
+               
                 //Change the id_order_state of the line in TBL_ORDER
                 query = "UPDATE TBL_ORDER SET id_order_state = " + i_state.ToString() + ", date_update = GETDATE() WHERE id_order = " + id_order;
 
